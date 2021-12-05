@@ -41,7 +41,7 @@ def main():
                         doubleCoords.append([xCoord, yCoord])
                 else:
                     ventCoords[yCoord].append(xCoord)
-    breakpoint()
+    print(len(doubleCoords))
 
 
 if __name__ == '__main__':
