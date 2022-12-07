@@ -71,5 +71,4 @@ if __name__ == '__main__':
                 size, name = line.split(" ")
                 file = File(name, int(size))
                 path[-1].contents.append(file)
-    sizes = [directory.size for directory in directories if directory.size <= 100000]
-    print(sum(sizes))
+    print(sum(directory.size for directory in directories if directory.size <= 100000))
