@@ -2,6 +2,10 @@ class Knot:
     x: int
     y: int
 
+    def __init__(self):
+        self.x = 0
+        self.y = 0
+
 
 class Head(Knot):
     def move(self, direction: str):
@@ -17,10 +21,15 @@ class Head(Knot):
 
 
 class Body(Knot):
-    def follow(self, other):
-        assert type(other) == Knot
-        x_diff = other.x - self.x
-        y_diff = other.y - self.y
+    previous: Knot
+
+    def __init__(self, previous: Knot):
+        super().__init__()
+        self.previous = previous
+    
+    def update(self):
+        x_diff = self.previous.x - self.x
+        y_diff = self.previous.y - self.y
         x_abs = abs(x_diff)
         y_abs = abs(y_diff)
         if x_abs > 1 or x_abs and y_abs > 1:
@@ -34,10 +43,11 @@ class Tail(Body):
     _x: int
     _y: int
     
-    def __init__(self):
-        self.visited = set()
+    def __init__(self, previous: Knot):
         self._x = 0
         self._y = 0
+        self.visited = set()
+        super().__init__(previous)
 
     @property
     def x(self):
@@ -59,16 +69,19 @@ class Tail(Body):
 
 
 if __name__ == '__main__':
-    with open("input.txt") as file:
+    with open("test_input.txt") as file:
         moves = [(line[0], int(line[2:])) for line in file.readlines()]
-    tail_position, head_position = [(0, 0)]*2
-    visited: set[tuple[int, int]] = set()
-    for index, (direction, amount) in enumerate(moves):
+    head = Head()
+    knots = [head]
+    for _ in range(8):
+        knots.append(Body(knots[-1]))
+    tail = Tail(knots[8])
+    knots.append(tail)
+    completed_moves = 0
+    for move_index, (direction_, amount) in enumerate(moves):
         for move in range(amount):
-            visited.add(tail_position)
-
-            if not index and not move:
-                continue
-
-        visited.add(tail_position)
-    print(len(visited))
+            head.move(direction_)
+            for knot in knots[1:completed_moves+1]:
+                knot.update()
+            completed_moves += 1
+    print(tail.visited)
