@@ -2,13 +2,16 @@ class Knot:
     x: int
     y: int
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.x = 0
         self.y = 0
 
+    def __repr__(self) -> str:
+        return "({}, {})".format(self.x, self.y)
+
 
 class Head(Knot):
-    def move(self, direction: str):
+    def move(self, direction: str) -> None:
         match direction:
             case "L":
                 self.x -= 1
@@ -23,11 +26,11 @@ class Head(Knot):
 class Body(Knot):
     previous: Knot
 
-    def __init__(self, previous: Knot):
+    def __init__(self, previous: Knot) -> None:
         super().__init__()
         self.previous = previous
     
-    def update(self):
+    def update(self) -> None:
         x_diff = self.previous.x - self.x
         y_diff = self.previous.y - self.y
         x_abs = abs(x_diff)
@@ -39,37 +42,31 @@ class Body(Knot):
 
 
 class Tail(Body):
-    visited: set
-    _x: int
-    _y: int
+    visited: set[tuple[int, int]]
     
-    def __init__(self, previous: Knot):
-        self._x = 0
-        self._y = 0
-        self.visited = set()
+    def __init__(self, previous: Knot) -> None:
+        self.visited = {(0, 0)}
         super().__init__(previous)
 
-    @property
-    def x(self):
-        return self._x
+    def __str__(self) -> str:
+        min_x = min(pos[0] for pos in self.visited)
+        max_x = max(pos[0] for pos in self.visited)
+        min_y = min(pos[1] for pos in self.visited)
+        max_y = max(pos[1] for pos in self.visited)
+        buffer = ""
+        for y in range(min_y, max_y+1):
+            for x in range(min_x, max_x+1):
+                buffer += "#" if (x, y) in self.visited else "."
+            buffer += "\n"
+        return buffer
 
-    @x.setter
-    def x(self, new_value: int):
-        self.visited.add((self._x, self._y))
-        self._x = new_value
-
-    @property
-    def y(self):
-        return self._y
-
-    @y.setter
-    def y(self, new_value: int):
-        self.visited.add((self._x, self._y))
-        self._y = new_value
+    def update(self) -> None:
+        super().update()
+        self.visited.add((self.x, self.y))
 
 
 if __name__ == '__main__':
-    with open("test_input.txt") as file:
+    with open("input.txt") as file:
         moves = [(line[0], int(line[2:])) for line in file.readlines()]
     head = Head()
     knots = [head]
@@ -84,4 +81,5 @@ if __name__ == '__main__':
             for knot in knots[1:completed_moves+1]:
                 knot.update()
             completed_moves += 1
-    print(tail.visited)
+    print(tail)
+    print(len(tail.visited))
