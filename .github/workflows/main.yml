@@ -9,12 +9,14 @@ jobs:
     name: "Pull the day's input"
     runs-on: ubuntu-latest
     steps:
+    - name: Set current date as env variable
+        run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
       - name: Checkout Repo
         uses: actions/checkout@v4
       - name: Make folder
         run: mkdir -p "$(date +%Y)"/"$(date +%d)"/
       - name: Download input
-        run: curl 'https://adventofcode.com/2022/day/$(date +%-d)/input' -H Cookie >-
+        run: curl 'https://adventofcode.com/2022/day/"$(date +%-d)"/input' -H Cookie >-
           session=${{ secrets.AOC_SESSION_ID }}
           > "$(date +%Y)"/"$(date +%d)"/input.txt
         
