@@ -1,6 +1,8 @@
 on:
   schedule:
     - cron: "15 5 1-24 12 *"
+  workflow_dispatch:
+  
 
 jobs:
   pull_input:
