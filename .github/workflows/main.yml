@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set directory as env variable
-        run: echo "DIR=$(date +%Y)"/"$(date +%d)" >> GITHUB_ENV
+        run: echo "DIR=$(date +%Y)"/"$(date +%d)" >> $GITHUB_ENV
       - name: Set URL as env variable
         run: echo "URL=https://adventofcode.com/$(date +%Y)/day/$(date +%-d)/input" >> $GITHUB_ENV
       - name: Checkout Repo
