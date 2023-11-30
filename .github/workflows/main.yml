@@ -16,7 +16,5 @@ jobs:
       - name: Make folder
         run: mkdir -p "$(date +%Y)"/"$(date +%d)"/
       - name: Download input
-        run: curl 'https://adventofcode.com/2022/day/"$(date +%-d)"/input' -H Cookie >-
-          session=${{ secrets.AOC_SESSION_ID }}
-          > "$(date +%Y)"/"$(date +%d)"/input.txt
+        run: curl 'https://adventofcode.com/2022/day/"$(date +%-d)"/input' -H ${{ secrets.AOC_SESSION_ID }} > "$(date +%Y)"/"$(date +%d)"/input.txt
         
