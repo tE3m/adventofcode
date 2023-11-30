@@ -9,12 +9,20 @@ jobs:
     name: "Pull the day's input"
     runs-on: ubuntu-latest
     steps:
-      - name: Set current date as env variable
-        run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
+      - name: Set directory as env variable
+        run: echo "DIR=$(date +%Y)"/"$(date +%d)" >> GITHUB_ENV
+      - name: Set URL as env variable
+        run: echo "URL=https://adventofcode.com/$(date +%Y)/day/$(date +%-d)/input" >> $GITHUB_ENV
       - name: Checkout Repo
         uses: actions/checkout@v4
       - name: Make folder
-        run: mkdir -p "$(date +%Y)"/"$(date +%d)"/
+        run: mkdir -p $DIR
       - name: Download input
-        run: curl 'https://adventofcode.com/2022/day/"$(date +%-d)"/input' -H ${{ secrets.AOC_SESSION_ID }} > "$(date +%Y)"/"$(date +%d)"/input.txt
+        run: curl $URL -H ${{ secrets.AOC_SESSION_ID }} > $DIR/input.txt
+      - name: Commit and push
+        uses: test-room-7/action-update-file@v1.8.0
+        with:
+          file-path: $DIR/input.txt
+          commit-msg: Update resources
+          github-token: ${{ secrets.GH_TOKEN }}
         
