@@ -6,7 +6,7 @@ on:
 
 jobs:
   pull_input:
-    name: "Pull the day's input"
+    name: "Prepare daily files"
     runs-on: ubuntu-latest
     steps:
       - name: Set directory as env variable
@@ -17,12 +17,17 @@ jobs:
         uses: actions/checkout@v4
       - name: Make folder
         run: mkdir -p $DIR
+      - name: Create C source files
+        run: echo "# include 'stdio.h'\n\nint main(){\nFILE *input_file=fopen('input.txt', 'r');\n\n}" | tee $DIR/task1.c $DIR/task2.c > /dev/null
       - name: Download input
         run: curl $URL -H ${{ secrets.AOC_SESSION_ID }} > $DIR/input.txt
       - name: Commit and push
         uses: test-room-7/action-update-file@v1.8.0
         with:
-          file-path: "*/*/input.txt"
+          file-path: |
+            $DIR/input.txt
+            $DIR/task1.c
+            $DIR/task2.c
           commit-msg: Update resources
           github-token: ${{ secrets.GH_TOKEN }}
         
