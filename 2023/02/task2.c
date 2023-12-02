@@ -11,8 +11,6 @@ int main(){
     while (fgets(line, 200, input_file) != NULL){
         int max[] = {0, 0, 0};
         char *cubes, *cubes_saveptr, *game_saveptr;
-        char *game_str = strtok_r(line, ":", &cubes_saveptr);
-        int game_id = strtol(game_str + 5, NULL, 10);
         do {
             cubes = strtok_r(NULL, ";", &cubes_saveptr);
             char cubes_copy[strlen(cubes)+1];
