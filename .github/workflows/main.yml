@@ -18,7 +18,7 @@ jobs:
       - name: Make folder
         run: mkdir -p $DIR
       - name: Create C source files
-        run: echo "# include 'stdio.h'\n\nint main(){\nFILE *input_file=fopen('input.txt', 'r');\n\n}" | tee $DIR/task1.c $DIR/task2.c > /dev/null
+        run: echo -e "# include 'stdio.h'\n\nint main(){\nFILE *input_file=fopen('input.txt', 'r');\n\n}" | tee $DIR/task1.c $DIR/task2.c > /dev/null
       - name: Download input
         run: curl $URL -H ${{ secrets.AOC_SESSION_ID }} > $DIR/input.txt
       - name: Commit and push
