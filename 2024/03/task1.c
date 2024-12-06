@@ -3,7 +3,7 @@
 #include <regex.h>
 
 int main(){
-	FILE *input_file=fopen("input.txt", "r");
+	FILE *input_file=fopen("input_dont.txt", "r");
     regex_t expr;
     regmatch_t *pmatch = malloc(sizeof(regmatch_t)*3);
     regcomp(&expr, "mul\\(([[:digit:]]+),([[:digit:]]+)\\)", REG_EXTENDED);
